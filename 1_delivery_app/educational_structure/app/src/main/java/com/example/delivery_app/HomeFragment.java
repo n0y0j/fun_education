@@ -27,7 +27,7 @@ public class HomeFragment extends Fragment {
 //                Toast.makeText(getActivity(), "korea", Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
-                intent.putExtra("country", "korea");
+                intent.putExtra("country", 0);
                 startActivity(intent);
             }
         });
@@ -38,7 +38,7 @@ public class HomeFragment extends Fragment {
 //                Toast.makeText(getActivity(), "japan", Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
-                intent.putExtra("country", "japan");
+                intent.putExtra("country", 1);
                 startActivity(intent);
             }
         });
@@ -49,7 +49,7 @@ public class HomeFragment extends Fragment {
 //                Toast.makeText(getActivity(), "china", Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
-                intent.putExtra("country", "china");
+                intent.putExtra("country", 2);
                 startActivity(intent);
             }
         });
