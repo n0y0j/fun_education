@@ -1,6 +1,7 @@
 package com.example.delivery_app.DetailFragment.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,16 @@ import java.util.HashMap;
 
 public class KoreaRecyclerAdapter extends RecyclerView.Adapter<KoreaViewHolder> {
 
-    private HashMap<String, ArrayList<String>> product;
+    private HashMap<String, ArrayList<String>> product = new HashMap<>();
 
     private int[] src = {
             R.drawable.kimbap, R.drawable.kimchi, R.drawable.rice
     };
+
+    public KoreaRecyclerAdapter(HashMap<String, ArrayList<String>> product) {
+        this.product = product;
+        Log.d("zzzzzzzzzzz", this.product.toString());
+    }
 
     @NonNull
     @Override
@@ -36,10 +42,13 @@ public class KoreaRecyclerAdapter extends RecyclerView.Adapter<KoreaViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull KoreaViewHolder holder, int position) {
+        Log.d("zzzzzzzzzzz", product.get("name").get(position));
+
         holder.image.setImageResource(src[position]);
         holder.name.setText(product.get("name").get(position));
         holder.score.setText(product.get("score").get(position));
         holder.min_price.setText(product.get("min_price").get(position));
+
     }
 
     @Override
