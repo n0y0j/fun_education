@@ -15,4 +15,5 @@
         android:id="@+id/payment"
         android:icon="@drawable/bottom_cart"
         android:title="구매"/>
+
 </menu>
