@@ -23,8 +23,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static android.content.ContentValues.TAG;
-
 public class KoreaFragment extends Fragment {
 
     private HashMap<String, ArrayList<String>> product = new HashMap<>();
@@ -47,12 +45,12 @@ public class KoreaFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                name.add(document.get("name").toString());
+                                name.add(document.getId());
                                 score.add(document.get("score").toString());
                                 min_price.add(document.get("min_price").toString());
                             }
                         } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
+                            Log.w("zzzzzzz", "Error getting documents.", task.getException());
                         }
                     }
                 });
