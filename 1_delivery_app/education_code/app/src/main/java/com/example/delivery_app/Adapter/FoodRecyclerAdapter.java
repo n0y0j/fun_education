@@ -16,31 +16,33 @@ import com.example.delivery_app.R;
 
 import java.util.ArrayList;
 
-public class RecoRecyclerAdapter extends RecyclerView.Adapter<RecoViewHolder> {
+public class FoodRecyclerAdapter extends RecyclerView.Adapter<FoodViewHolder> {
 
     private Context context;
     private ArrayList<Reco> product;
 
-    public RecoRecyclerAdapter(ArrayList<Reco> product) {
+    public FoodRecyclerAdapter(ArrayList<Reco> product) {
         this.product = product;
         Log.d("TAG", product.toString());
     }
 
     @NonNull
     @Override
-    public RecoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public FoodViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.reco_food_card, parent, false);
-        RecoViewHolder viewHolder = new RecoViewHolder(view);
+        View view = inflater.inflate(R.layout.food_card, parent, false);
+        FoodViewHolder viewHolder = new FoodViewHolder(view);
 
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecoViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull FoodViewHolder holder, int position) {
+
         holder.name.setText(product.get(position).name);
+        if (holder.name.getText().equals("Bevarage")) holder.name.setTextSize(13f);
         holder.price.setText(product.get(position).price);
 
         Glide.with(context).load(product.get(position).url).into(holder.image);
