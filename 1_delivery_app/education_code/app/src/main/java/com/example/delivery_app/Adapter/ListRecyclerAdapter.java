@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,7 +45,6 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter<ListViewHolder> {
             public void onClick(View v) {
                 Intent intent = new Intent(context, FoodActivity.class);
                 intent.putExtra("name", holder.name.getText());
-                Toast.makeText(context, holder.name.getText(), Toast.LENGTH_SHORT).show();
                 context.startActivity(intent);
             }
         });

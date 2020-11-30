@@ -76,6 +76,6 @@ public class MainActivity extends AppCompatActivity {
                 reco_recyclerView.setAdapter(recoRecyclerAdapter);
                 reco_recyclerView.setLayoutManager(linearLayoutManager2);
             }
-        },1500);
+        },2000);
     }
 }
