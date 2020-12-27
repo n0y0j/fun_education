@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todoapp/auth/auth_page.dart';
 
 class IntroPage extends StatefulWidget {
   @override
@@ -6,6 +7,20 @@ class IntroPage extends StatefulWidget {
 }
 
 class _IntroPageState extends State<IntroPage> {
+  @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(Duration(milliseconds: 1000), () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => AuthPage(),
+        ),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
