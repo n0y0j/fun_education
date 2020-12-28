@@ -37,49 +37,35 @@ class AuthPage extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(height: MediaQuery.of(context).size.height * 0.22),
-                Container(
-                  padding: EdgeInsets.all(10),
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: Color(0xee7BC4E9),
-                      width: 3,
-                    ),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(30),
-                    ),
-                  ),
-                  child: Text(
-                    "시작하기",
-                    style: TextStyle(fontSize: 20, color: Colors.grey[700]),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+                makeButton(context, '시작하기'),
                 SizedBox(height: 20),
-                Container(
-                  padding: EdgeInsets.all(10),
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: Color(0xee7BC4E9),
-                      width: 3,
-                    ),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(30),
-                    ),
-                  ),
-                  child: Text(
-                    "로그인",
-                    style: TextStyle(fontSize: 20, color: Colors.grey[700]),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+                makeButton(context, '로그인'),
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget makeButton(BuildContext context, String title) {
+    return Container(
+      padding: EdgeInsets.all(10),
+      width: MediaQuery.of(context).size.width * 0.7,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(
+          color: Color(0xee7BC4E9),
+          width: 3,
+        ),
+        borderRadius: BorderRadius.all(
+          Radius.circular(30),
+        ),
+      ),
+      child: Text(
+        title,
+        style: TextStyle(fontSize: 20, color: Colors.grey[700]),
+        textAlign: TextAlign.center,
       ),
     );
   }
