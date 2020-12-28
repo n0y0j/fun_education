@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:todoapp/auth/login_page.dart';
+import 'package:todoapp/auth/sign_page.dart';
 
-class SignPage extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   @override
-  _SignPageState createState() => _SignPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _SignPageState extends State<SignPage> {
+class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,14 +26,34 @@ class _SignPageState extends State<SignPage> {
       body: Column(
         children: [
           Image.asset('assets/images/logo.png', height: 80),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.12),
           makeTextField('이메일', '이메일을 입력해주세요',
               Icon(Icons.email, color: Colors.blueAccent)),
-          makeTextField('닉네임', '닉네임을 입력해주세요',
-              Icon(Icons.person, color: Colors.blueAccent)),
           makeTextField('비밀번호', '비밀번호를 입력해주세요',
               Icon(Icons.https, color: Colors.blueAccent)),
-          makeTextField('비밀번호 확인', '비밀번호를 입력해주세요',
-              Icon(Icons.https, color: Colors.blueAccent)),
+          SizedBox(height: 15),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("계정이 없으시다면?",
+                  style: TextStyle(color: Colors.grey[600], fontSize: 14)),
+              SizedBox(width: 5),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => SignPage(),
+                    ),
+                  );
+                },
+                child: Text(
+                  "가입하기",
+                  style: TextStyle(color: Colors.black87, fontSize: 14),
+                ),
+              ),
+            ],
+          ),
           Expanded(child: Container()),
           Container(
             width: MediaQuery.of(context).size.width,
@@ -75,7 +95,7 @@ class _SignPageState extends State<SignPage> {
                       );
                     },
                     child: Text(
-                      "회원가입",
+                      "로그인",
                       style: TextStyle(fontSize: 20, color: Colors.grey[700]),
                       textAlign: TextAlign.center,
                     ),

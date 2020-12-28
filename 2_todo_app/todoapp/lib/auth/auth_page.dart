@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todoapp/auth/login_page.dart';
+import 'package:todoapp/auth/sign_page.dart';
 
 class AuthPage extends StatelessWidget {
   @override
@@ -62,10 +64,27 @@ class AuthPage extends StatelessWidget {
           Radius.circular(30),
         ),
       ),
-      child: Text(
-        title,
-        style: TextStyle(fontSize: 20, color: Colors.grey[700]),
-        textAlign: TextAlign.center,
+      child: InkWell(
+        onTap: () {
+          (title == "시작하기")
+              ? Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => SignPage(),
+                  ),
+                )
+              : Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => LoginPage(),
+                  ),
+                );
+        },
+        child: Text(
+          title,
+          style: TextStyle(fontSize: 20, color: Colors.grey[700]),
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }
