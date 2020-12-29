@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todoapp/auth/sign_page.dart';
+import 'package:todoapp/home/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -90,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (BuildContext context) => LoginPage(),
+                          builder: (BuildContext context) => HomePage(),
                         ),
                       );
                     },
