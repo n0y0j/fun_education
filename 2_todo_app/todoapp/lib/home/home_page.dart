@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todoapp/home/calendar_page.dart';
 import 'package:todoapp/home/today_schedule.dart';
 
 class HomePage extends StatefulWidget {
@@ -7,6 +8,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String pageType = "today";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,17 +39,32 @@ class _HomePageState extends State<HomePage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text(
-                          "오늘의 일정",
-                          style: TextStyle(color: Colors.white, fontSize: 17),
+                        InkWell(
+                          onTap: () {
+                            changePage('today');
+                          },
+                          child: Text(
+                            "오늘의 일정",
+                            style: (pageType == 'today')
+                                ? TextStyle(color: Colors.white, fontSize: 17)
+                                : TextStyle(
+                                    color: Colors.grey[300], fontSize: 17),
+                          ),
                         ),
                         Center(
                             child: Container(
                                 width: 2, height: 22, color: Colors.white)),
-                        Text(
-                          "계획 세우기",
-                          style:
-                              TextStyle(color: Colors.grey[300], fontSize: 17),
+                        InkWell(
+                          onTap: () {
+                            changePage('schedule');
+                          },
+                          child: Text(
+                            "계획 세우기",
+                            style: (pageType == 'schedule')
+                                ? TextStyle(color: Colors.white, fontSize: 17)
+                                : TextStyle(
+                                    color: Colors.grey[300], fontSize: 17),
+                          ),
                         ),
                       ],
                     ),
@@ -71,11 +89,17 @@ class _HomePageState extends State<HomePage> {
                     )
                   ],
                   borderRadius: BorderRadius.all(Radius.circular(40))),
-              child: TodaySchedule(),
+              child: (pageType == "today") ? TodaySchedule() : CalendarPage(),
             ),
           ),
         ],
       ),
     );
+  }
+
+  changePage(String page) {
+    setState(() {
+      pageType = page;
+    });
   }
 }
