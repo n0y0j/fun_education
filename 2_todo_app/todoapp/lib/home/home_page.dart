@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todoapp/home/today_schedule.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -70,6 +71,7 @@ class _HomePageState extends State<HomePage> {
                     )
                   ],
                   borderRadius: BorderRadius.all(Radius.circular(40))),
+              child: TodaySchedule(),
             ),
           ),
         ],
