@@ -1,13 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:todoapp/home/widget/schedule_widget.dart';
+import 'package:todoapp/model/people.dart';
 
 class TodaySchedule extends StatefulWidget {
+  final People user;
+
+  const TodaySchedule({Key key, this.user}) : super(key: key);
   @override
   _TodayScheduleState createState() => _TodayScheduleState();
 }
 
 class _TodayScheduleState extends State<TodaySchedule> {
+  String nickname;
+  String uid;
+
+  @override
+  void initState() {
+    nickname = widget.user.nickname;
+    uid = widget.user.uid;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -17,7 +31,7 @@ class _TodayScheduleState extends State<TodaySchedule> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              "오늘 명희님의 일정",
+              "오늘 $nickname님의 일정",
               style: TextStyle(
                 fontSize: 22,
                 color: Colors.grey[800],

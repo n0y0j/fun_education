@@ -7,10 +7,6 @@ class FireAuth {
   String uid;
 
   FireAuth() {
-    prepareUser();
-  }
-
-  prepareUser() {
     uid = auth.currentUser.uid;
   }
 

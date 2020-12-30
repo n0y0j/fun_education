@@ -1,16 +1,33 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:todoapp/auth/login_page.dart';
 import 'package:todoapp/auth/sign_page.dart';
 import 'package:todoapp/firebase/fire_auth.dart';
 import 'package:todoapp/home/home_page.dart';
+import 'package:todoapp/model/people.dart';
 
-class AuthPage extends StatelessWidget {
+class AuthPage extends StatefulWidget {
+  @override
+  _AuthPageState createState() => _AuthPageState();
+}
+
+class _AuthPageState extends State<AuthPage> {
   FireAuth fa = new FireAuth();
+  String nickname;
+
+  @override
+  void initState() {
+    getNickname();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (fa.uid != null) return HomePage();
-
+    if (fa.uid != null && nickname != null) {
+      return HomePage(
+        user: new People(nickname, fa.uid),
+      );
+    }
     return Scaffold(
       body: Column(
         children: [
@@ -56,42 +73,54 @@ class AuthPage extends StatelessWidget {
     );
   }
 
-  Widget makeButton(BuildContext context, String title) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      width: MediaQuery.of(context).size.width * 0.7,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(
-          color: Color(0xee7BC4E9),
-          width: 3,
-        ),
-        borderRadius: BorderRadius.all(
-          Radius.circular(30),
-        ),
-      ),
-      child: InkWell(
-        onTap: () {
-          (title == "시작하기")
-              ? Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => SignPage(),
-                  ),
-                )
-              : Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => LoginPage(),
-                  ),
-                );
-        },
-        child: Text(
-          title,
-          style: TextStyle(fontSize: 20, color: Colors.grey[700]),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
+  getNickname() async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(fa.uid)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      setState(() {
+        nickname = documentSnapshot.get('nickname');
+      });
+    });
   }
+}
+
+Widget makeButton(BuildContext context, String title) {
+  return Container(
+    padding: EdgeInsets.all(10),
+    width: MediaQuery.of(context).size.width * 0.7,
+    decoration: BoxDecoration(
+      color: Colors.white,
+      border: Border.all(
+        color: Color(0xee7BC4E9),
+        width: 3,
+      ),
+      borderRadius: BorderRadius.all(
+        Radius.circular(30),
+      ),
+    ),
+    child: InkWell(
+      onTap: () {
+        (title == "시작하기")
+            ? Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => SignPage(),
+                ),
+              )
+            : Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => LoginPage(),
+                ),
+              );
+      },
+      child: Text(
+        title,
+        style: TextStyle(fontSize: 20, color: Colors.grey[700]),
+        textAlign: TextAlign.center,
+      ),
+    ),
+  );
 }

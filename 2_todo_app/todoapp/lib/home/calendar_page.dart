@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:todoapp/home/widget/schedule_widget.dart';
+import 'package:todoapp/model/people.dart';
 
 class CalendarPage extends StatefulWidget {
+  final People user;
+
+  const CalendarPage({Key key, this.user}) : super(key: key);
   @override
   _CalendarPageState createState() => _CalendarPageState();
 }

@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:todoapp/home/calendar_page.dart';
 import 'package:todoapp/home/today_schedule.dart';
+import 'package:todoapp/model/people.dart';
 
 class HomePage extends StatefulWidget {
+  final People user;
+
+  const HomePage({Key key, this.user}) : super(key: key);
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -94,7 +99,9 @@ class _HomePageState extends State<HomePage> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      (pageType == "today") ? TodaySchedule() : CalendarPage(),
+                      (pageType == "today")
+                          ? TodaySchedule(user: widget.user)
+                          : CalendarPage(user: widget.user),
                       (pageType == "schedule")
                           ? Center(
                               child: InkWell(
