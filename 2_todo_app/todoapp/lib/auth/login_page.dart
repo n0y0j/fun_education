@@ -24,88 +24,95 @@ class _LoginPageState extends State<LoginPage> {
               Navigator.pop(context);
             }),
       ),
-      body: Column(
-        children: [
-          Image.asset('assets/images/logo.png', height: 80),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.12),
-          makeTextField('이메일', '이메일을 입력해주세요',
-              Icon(Icons.email, color: Colors.blueAccent)),
-          makeTextField('비밀번호', '비밀번호를 입력해주세요',
-              Icon(Icons.https, color: Colors.blueAccent)),
-          SizedBox(height: 15),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+      body: SingleChildScrollView(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Column(
             children: [
-              Text("계정이 없으시다면?",
-                  style: TextStyle(color: Colors.grey[600], fontSize: 14)),
-              SizedBox(width: 5),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => SignPage(),
-                    ),
-                  );
-                },
-                child: Text(
-                  "가입하기",
-                  style: TextStyle(color: Colors.black87, fontSize: 14),
-                ),
-              ),
-            ],
-          ),
-          Expanded(child: Container()),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.25,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xffa1c4fd), Color(0xffc2e9fb)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(200),
-                topRight: Radius.circular(200),
-              ),
-            ),
-            child: Column(
-              children: [
-                SizedBox(height: MediaQuery.of(context).size.height * 0.12),
-                Container(
-                  padding: EdgeInsets.all(10),
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: Color(0xee7BC4E9),
-                      width: 3,
-                    ),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(30),
-                    ),
-                  ),
-                  child: InkWell(
+              Image.asset('assets/images/logo.png', height: 80),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.12),
+              makeTextField('이메일', '이메일을 입력해주세요',
+                  Icon(Icons.email, color: Colors.blueAccent)),
+              makeTextField('비밀번호', '비밀번호를 입력해주세요',
+                  Icon(Icons.https, color: Colors.blueAccent)),
+              SizedBox(height: 15),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("계정이 없으시다면?",
+                      style: TextStyle(color: Colors.grey[600], fontSize: 14)),
+                  SizedBox(width: 5),
+                  InkWell(
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (BuildContext context) => HomePage(),
+                          builder: (BuildContext context) => SignPage(),
                         ),
                       );
                     },
                     child: Text(
-                      "로그인",
-                      style: TextStyle(fontSize: 20, color: Colors.grey[700]),
-                      textAlign: TextAlign.center,
+                      "가입하기",
+                      style: TextStyle(color: Colors.black87, fontSize: 14),
                     ),
                   ),
+                ],
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.15),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height * 0.325,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xffa1c4fd), Color(0xffc2e9fb)],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(200),
+                    topRight: Radius.circular(200),
+                  ),
                 ),
-              ],
-            ),
+                child: Column(
+                  children: [
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.12),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(
+                          color: Color(0xee7BC4E9),
+                          width: 3,
+                        ),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(30),
+                        ),
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => HomePage(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          "로그인",
+                          style:
+                              TextStyle(fontSize: 20, color: Colors.grey[700]),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

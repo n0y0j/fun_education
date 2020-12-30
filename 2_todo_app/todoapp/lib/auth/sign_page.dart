@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todoapp/auth/login_page.dart';
+import 'package:todoapp/firebase/fire_auth.dart';
 
 class SignPage extends StatefulWidget {
   @override
@@ -7,6 +8,13 @@ class SignPage extends StatefulWidget {
 }
 
 class _SignPageState extends State<SignPage> {
+  FireAuth fa = new FireAuth();
+
+  TextEditingController emailCon = new TextEditingController();
+  TextEditingController nickCon = new TextEditingController();
+  TextEditingController passCon = new TextEditingController();
+  TextEditingController repassCon = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,73 +31,84 @@ class _SignPageState extends State<SignPage> {
               Navigator.pop(context);
             }),
       ),
-      body: Column(
-        children: [
-          Image.asset('assets/images/logo.png', height: 80),
-          makeTextField('이메일', '이메일을 입력해주세요',
-              Icon(Icons.email, color: Colors.blueAccent)),
-          makeTextField('닉네임', '닉네임을 입력해주세요',
-              Icon(Icons.person, color: Colors.blueAccent)),
-          makeTextField('비밀번호', '비밀번호를 입력해주세요',
-              Icon(Icons.https, color: Colors.blueAccent)),
-          makeTextField('비밀번호 확인', '비밀번호를 입력해주세요',
-              Icon(Icons.https, color: Colors.blueAccent)),
-          Expanded(child: Container()),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.25,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xffa1c4fd), Color(0xffc2e9fb)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(200),
-                topRight: Radius.circular(200),
-              ),
-            ),
-            child: Column(
-              children: [
-                SizedBox(height: MediaQuery.of(context).size.height * 0.12),
-                Container(
-                  padding: EdgeInsets.all(10),
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: Color(0xee7BC4E9),
-                      width: 3,
-                    ),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(30),
-                    ),
+      body: SingleChildScrollView(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            children: [
+              Image.asset('assets/images/logo.png', height: 80),
+              makeTextField('이메일', '이메일을 입력해주세요',
+                  Icon(Icons.email, color: Colors.blueAccent), emailCon),
+              makeTextField('닉네임', '닉네임을 입력해주세요',
+                  Icon(Icons.person, color: Colors.blueAccent), nickCon),
+              makeTextField('비밀번호', '비밀번호를 입력해주세요',
+                  Icon(Icons.https, color: Colors.blueAccent), passCon),
+              makeTextField('비밀번호 확인', '비밀번호를 입력해주세요',
+                  Icon(Icons.https, color: Colors.blueAccent), repassCon),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height * 0.35,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xffa1c4fd), Color(0xffc2e9fb)],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
                   ),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => LoginPage(),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      "회원가입",
-                      style: TextStyle(fontSize: 20, color: Colors.grey[700]),
-                      textAlign: TextAlign.center,
-                    ),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(200),
+                    topRight: Radius.circular(200),
                   ),
                 ),
-              ],
-            ),
+                child: Column(
+                  children: [
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.12),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(
+                          color: Color(0xee7BC4E9),
+                          width: 3,
+                        ),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(30),
+                        ),
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          fa.registerUser(emailCon.text, nickCon.text,
+                              passCon.text, repassCon.text);
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => LoginPage(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          "회원가입",
+                          style:
+                              TextStyle(fontSize: 20, color: Colors.grey[700]),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
 
-  Widget makeTextField(String title, String hintText, Icon icon) {
+  Widget makeTextField(String title, String hintText, Icon icon,
+      TextEditingController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -120,6 +139,7 @@ class _SignPageState extends State<SignPage> {
             ),
           ),
           child: TextField(
+            controller: controller,
             decoration: InputDecoration(
                 border: InputBorder.none,
                 icon: icon,
