@@ -4,10 +4,13 @@ import 'package:todoapp/firebase/fire_store.dart';
 class FireAuth {
   FirebaseAuth auth = FirebaseAuth.instance;
   FireStore fs = new FireStore();
-
   String uid;
 
-  setUserUid() {
+  FireAuth() {
+    prepareUser();
+  }
+
+  prepareUser() {
     uid = auth.currentUser.uid;
   }
 
@@ -27,8 +30,6 @@ class FireAuth {
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
           email: email, password: password);
-
-      setUserUid();
     } on FirebaseAuthException catch (e) {
       print(e.code);
     }

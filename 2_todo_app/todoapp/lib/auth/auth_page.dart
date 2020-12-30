@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:todoapp/auth/login_page.dart';
 import 'package:todoapp/auth/sign_page.dart';
+import 'package:todoapp/firebase/fire_auth.dart';
+import 'package:todoapp/home/home_page.dart';
 
 class AuthPage extends StatelessWidget {
+  FireAuth fa = new FireAuth();
+
   @override
   Widget build(BuildContext context) {
+    if (fa.uid != null) return HomePage();
+
     return Scaffold(
       body: Column(
         children: [
