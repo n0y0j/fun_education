@@ -79,15 +79,7 @@ class _SignPageState extends State<SignPage> {
                       ),
                       child: InkWell(
                         onTap: () {
-                          fa.registerUser(emailCon.text, nickCon.text,
-                              passCon.text, repassCon.text);
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) => LoginPage(),
-                            ),
-                          );
+                          signup();
                         },
                         child: Text(
                           "회원가입",
@@ -103,6 +95,18 @@ class _SignPageState extends State<SignPage> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  signup() async {
+    await fa.registerUser(
+        emailCon.text, nickCon.text, passCon.text, repassCon.text);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => LoginPage(),
       ),
     );
   }

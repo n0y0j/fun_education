@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todoapp/auth/sign_page.dart';
+import 'package:todoapp/firebase/fire_auth.dart';
 import 'package:todoapp/home/home_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -8,6 +9,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  FireAuth fa = new FireAuth();
+
+  TextEditingController emailCon = new TextEditingController();
+  TextEditingController passCon = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,9 +39,9 @@ class _LoginPageState extends State<LoginPage> {
               Image.asset('assets/images/logo.png', height: 80),
               SizedBox(height: MediaQuery.of(context).size.height * 0.12),
               makeTextField('이메일', '이메일을 입력해주세요',
-                  Icon(Icons.email, color: Colors.blueAccent)),
+                  Icon(Icons.email, color: Colors.blueAccent), emailCon),
               makeTextField('비밀번호', '비밀번호를 입력해주세요',
-                  Icon(Icons.https, color: Colors.blueAccent)),
+                  Icon(Icons.https, color: Colors.blueAccent), passCon),
               SizedBox(height: 15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -92,12 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       child: InkWell(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) => HomePage(),
-                            ),
-                          );
+                          login();
                         },
                         child: Text(
                           "로그인",
@@ -117,7 +118,19 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget makeTextField(String title, String hintText, Icon icon) {
+  login() async {
+    await fa.loginUser(emailCon.text, passCon.text);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => HomePage(),
+      ),
+    );
+  }
+
+  Widget makeTextField(String title, String hintText, Icon icon,
+      TextEditingController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -148,6 +161,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           child: TextField(
+            controller: controller,
             decoration: InputDecoration(
                 border: InputBorder.none,
                 icon: icon,
