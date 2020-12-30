@@ -31,32 +31,6 @@ class _CalendarPageState extends State<CalendarPage> {
             scheduleWidget(context, "용준이랑 데이트", "13:00 PM"),
             SizedBox(height: 20),
             scheduleWidget(context, "회사 업무 마무리", "20:00 PM"),
-            SizedBox(height: 30),
-            Center(
-              child: InkWell(
-                child: Container(
-                  height: 100,
-                  width: 70,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topRight,
-                      end: Alignment.bottomLeft,
-                      colors: [Color(0xfff96060), Colors.red],
-                    ),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: Text(
-                      "+",
-                      style: TextStyle(
-                        fontSize: 40,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            )
           ],
         ),
       ),
