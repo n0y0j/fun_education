@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:todoapp/firebase/fire_store.dart';
 import 'package:todoapp/home/widget/schedule_widget.dart';
 import 'package:todoapp/model/people.dart';
+import 'package:todoapp/model/post.dart';
 
 class TodaySchedule extends StatefulWidget {
   final People user;
@@ -14,11 +16,39 @@ class TodaySchedule extends StatefulWidget {
 class _TodayScheduleState extends State<TodaySchedule> {
   String nickname;
   String uid;
+  List<Post> data;
+  FireStore fs = new FireStore();
+  DateTime today = DateTime.now();
+  final monthList = [
+    "JAN",
+    "FEB",
+    "MAR",
+    "APR",
+    "MAY",
+    "JUN",
+    "JUL",
+    "AUG",
+    "SEP",
+    "OCT",
+    "NOV",
+    "DEC"
+  ];
+
+  getScheduleDate() async {
+    await fs.getSchedule(widget.user.uid,
+        "${today.year} ${monthList[today.month - 1]} ${today.day}");
+
+    setState(() {
+      data = fs.getData();
+    });
+  }
 
   @override
   void initState() {
     nickname = widget.user.nickname;
     uid = widget.user.uid;
+
+    getScheduleDate();
     super.initState();
   }
 
@@ -44,11 +74,9 @@ class _TodayScheduleState extends State<TodaySchedule> {
               color: Colors.blueAccent[100],
             ),
             SizedBox(height: 30),
-            scheduleWidget(context, "모모랑 산책하기", "10:00 AM"),
-            SizedBox(height: 20),
-            scheduleWidget(context, "용준이랑 데이트", "13:00 PM"),
-            SizedBox(height: 20),
-            scheduleWidget(context, "회사 업무 마무리", "20:00 PM"),
+            (data == null)
+                ? Container()
+                : Column(children: scheduleWidget(context, data))
           ],
         ),
       ),

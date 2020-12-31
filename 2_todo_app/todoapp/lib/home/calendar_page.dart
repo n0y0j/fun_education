@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:todoapp/firebase/fire_store.dart';
 import 'package:todoapp/home/widget/schedule_widget.dart';
 import 'package:todoapp/model/people.dart';
+import 'package:todoapp/model/post.dart';
 
 class CalendarPage extends StatefulWidget {
   final People user;
@@ -16,6 +18,8 @@ class _CalendarPageState extends State<CalendarPage> {
   CalendarController controller = new CalendarController();
   DateTime today = DateTime.now();
   DateTime selectedDay;
+  List<Post> data;
+  FireStore fs = new FireStore();
   final monthList = [
     "JAN",
     "FEB",
@@ -30,6 +34,21 @@ class _CalendarPageState extends State<CalendarPage> {
     "NOV",
     "DEC"
   ];
+
+  getScheduleDate(String date) async {
+    await fs.getSchedule(widget.user.uid, date);
+
+    setState(() {
+      data = fs.getData();
+    });
+  }
+
+  @override
+  void initState() {
+    getScheduleDate("${today.year} ${monthList[today.month - 1]} ${today.day}");
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +68,9 @@ class _CalendarPageState extends State<CalendarPage> {
             Text("${today.year} ${monthList[today.month - 1]} ${today.day}",
                 style: TextStyle(fontSize: 22, color: Colors.grey[600])),
             SizedBox(height: 20),
-            scheduleWidget(context, "모모랑 산책하기", "10:00 AM"),
-            SizedBox(height: 20),
-            scheduleWidget(context, "용준이랑 데이트", "13:00 PM"),
-            SizedBox(height: 20),
-            scheduleWidget(context, "회사 업무 마무리", "20:00 PM"),
+            (data == null)
+                ? Container()
+                : Column(children: scheduleWidget(context, data))
           ],
         ),
       ),
@@ -61,10 +78,10 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   void _onDaySelected(DateTime day, List events, List holidays) {
-    print('CALLBACK: _onDaySelected');
     setState(() {
       selectedDay = day;
-      print(selectedDay);
+      getScheduleDate(
+          "${selectedDay.year} ${monthList[selectedDay.month - 1]} ${selectedDay.day}");
     });
   }
 }

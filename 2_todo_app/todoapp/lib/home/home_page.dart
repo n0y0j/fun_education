@@ -21,6 +21,7 @@ class _HomePageState extends State<HomePage> {
   TextEditingController contentCon = new TextEditingController();
   String postDate;
   String postTime;
+  int count;
   final monthList = [
     "JAN",
     "FEB",
@@ -228,7 +229,13 @@ class _HomePageState extends State<HomePage> {
                                       MediaQuery.of(context).size.height * 0.1),
                               InkWell(
                                 onTap: () {
-                                  // fs.postSchedule(widget.user.uid, date, contentCon.text, time)
+                                  fs.postSchedule(widget.user.uid, postDate,
+                                      contentCon.text, postTime, count);
+
+                                  contentCon.clear();
+                                  postDate = '';
+                                  postTime = '';
+                                  changeClick();
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(vertical: 15),
@@ -296,18 +303,19 @@ class _HomePageState extends State<HomePage> {
 
       setState(() {
         postTime = '${hour}:${minute} ${timeType}';
+        count = (selectedTime.hour * 60) + (selectedTime.minute);
       });
     }
 
     setDate() async {
       DateTime selectedDate = await showDatePicker(
         context: context,
-        initialDate: DateTime.now(), // 초깃값
-        firstDate: DateTime(2020), // 시작일
-        lastDate: DateTime(2030), // 마지막일
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2020),
+        lastDate: DateTime(2030),
         builder: (BuildContext context, Widget child) {
           return Theme(
-            data: ThemeData.light(), // 다크테마
+            data: ThemeData.light(),
             child: child,
           );
         },
