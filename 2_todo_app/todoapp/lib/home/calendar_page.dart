@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:todoapp/home/widget/schedule_widget.dart';
 import 'package:todoapp/model/people.dart';
@@ -13,6 +14,23 @@ class CalendarPage extends StatefulWidget {
 
 class _CalendarPageState extends State<CalendarPage> {
   CalendarController controller = new CalendarController();
+  DateTime today = DateTime.now();
+  DateTime selectedDay;
+  final monthList = [
+    "JAN",
+    "FEB",
+    "MAR",
+    "APR",
+    "MAY",
+    "JUN",
+    "JUL",
+    "AUG",
+    "SEP",
+    "OCT",
+    "NOV",
+    "DEC"
+  ];
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -22,12 +40,13 @@ class _CalendarPageState extends State<CalendarPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TableCalendar(
+              onDaySelected: _onDaySelected,
               calendarController: controller,
               startingDayOfWeek: StartingDayOfWeek.sunday,
               initialCalendarFormat: CalendarFormat.week,
             ),
             SizedBox(height: 30),
-            Text("2020 DEC 29",
+            Text("${today.year} ${monthList[today.month - 1]} ${today.day}",
                 style: TextStyle(fontSize: 22, color: Colors.grey[600])),
             SizedBox(height: 20),
             scheduleWidget(context, "모모랑 산책하기", "10:00 AM"),
@@ -39,5 +58,13 @@ class _CalendarPageState extends State<CalendarPage> {
         ),
       ),
     );
+  }
+
+  void _onDaySelected(DateTime day, List events, List holidays) {
+    print('CALLBACK: _onDaySelected');
+    setState(() {
+      selectedDay = day;
+      print(selectedDay);
+    });
   }
 }

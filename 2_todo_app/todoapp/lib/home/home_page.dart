@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todoapp/firebase/fire_store.dart';
 import 'package:todoapp/home/calendar_page.dart';
 import 'package:todoapp/home/today_schedule.dart';
 import 'package:todoapp/model/people.dart';
@@ -16,6 +17,24 @@ class _HomePageState extends State<HomePage> {
   String pageType = "today";
   bool click = false;
   DateTime selectedDate;
+  FireStore fs = new FireStore();
+  TextEditingController contentCon = new TextEditingController();
+  String postDate;
+  String postTime;
+  final monthList = [
+    "JAN",
+    "FEB",
+    "MAR",
+    "APR",
+    "MAY",
+    "JUN",
+    "JUL",
+    "AUG",
+    "SEP",
+    "OCT",
+    "NOV",
+    "DEC"
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -191,6 +210,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                                 child: TextField(
+                                  controller: contentCon,
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintText: "일정을 입력해보세요",
@@ -200,27 +220,32 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               SizedBox(height: 20),
-                              makeWidget(context, "날짜", "일정을 선택하세요"),
+                              makeWidget("날짜", "일정을 선택하세요"),
                               SizedBox(height: 20),
-                              makeWidget(context, "시간", "시간을 선택하세요"),
+                              makeWidget("시간", "시간을 선택하세요"),
                               SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * 0.1),
-                              Container(
-                                padding: EdgeInsets.symmetric(vertical: 15),
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10),
+                              InkWell(
+                                onTap: () {
+                                  // fs.postSchedule(widget.user.uid, date, contentCon.text, time)
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 15),
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                    color: Color(0xffff96060),
                                   ),
-                                  color: Color(0xffff96060),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    "일정 추가",
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.white,
+                                  child: Center(
+                                    child: Text(
+                                      "일정 추가",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -249,72 +274,125 @@ class _HomePageState extends State<HomePage> {
       click = !(click);
     });
   }
-}
 
-Column makeWidget(BuildContext context, String type, String hintText) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        type,
-        style: TextStyle(fontSize: 15, color: Colors.grey[600]),
-      ),
-      SizedBox(height: 10),
-      Row(
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width * 0.15,
-            height: 45,
-            decoration: BoxDecoration(
-              color: Color(0xee7BC4E9),
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 5,
-                )
-              ],
-            ),
-            child: FlatButton(
-              onPressed: () {},
-              child: Text(
-                "선택",
-                style: TextStyle(color: Colors.white, fontSize: 14),
-              ),
-            ),
-          ),
-          SizedBox(width: 5),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.525,
-            height: 45,
-            padding: EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 4),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 5,
-                )
-              ],
-              border: Border.all(
+  Column makeWidget(String type, String hintText) {
+    setTime() async {
+      TimeOfDay selectedTime = await showTimePicker(
+        initialTime: TimeOfDay.now(),
+        context: context,
+      );
+
+      String timeType = (selectedTime.hour < 12) ? 'AM' : 'PM';
+      String hour = (selectedTime.hour < 10)
+          ? '0${selectedTime.hour}'
+          : (selectedTime.hour < 13)
+              ? selectedTime.hour.toString()
+              : (selectedTime.hour < 20)
+                  ? '0${int.parse(selectedTime.hour.toString()) - 12}'
+                  : '${int.parse(selectedTime.hour.toString()) - 12}';
+      String minute = (selectedTime.minute.toString().length == 1)
+          ? '0${selectedTime.minute}'
+          : selectedTime.minute.toString();
+
+      setState(() {
+        postTime = '${hour}:${minute} ${timeType}';
+      });
+    }
+
+    setDate() async {
+      DateTime selectedDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(), // 초깃값
+        firstDate: DateTime(2020), // 시작일
+        lastDate: DateTime(2030), // 마지막일
+        builder: (BuildContext context, Widget child) {
+          return Theme(
+            data: ThemeData.light(), // 다크테마
+            child: child,
+          );
+        },
+      );
+
+      setState(() {
+        postDate =
+            "${selectedDate.year} ${monthList[selectedDate.month - 1]} ${selectedDate.day}";
+      });
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          type,
+          style: TextStyle(fontSize: 15, color: Colors.grey[600]),
+        ),
+        SizedBox(height: 10),
+        Row(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width * 0.15,
+              height: 45,
+              decoration: BoxDecoration(
                 color: Color(0xee7BC4E9),
-                width: 1,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 5,
+                  )
+                ],
+              ),
+              child: FlatButton(
+                onPressed: () {
+                  (type == "날짜") ? setDate() : setTime();
+                },
+                child: Text(
+                  "선택",
+                  style: TextStyle(color: Colors.white, fontSize: 14),
+                ),
               ),
             ),
-            child: Center(
-              child: Text(
-                hintText,
-                style: TextStyle(color: Colors.grey[500], fontSize: 14),
+            SizedBox(width: 5),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.525,
+              height: 45,
+              padding: EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 4),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 5,
+                  )
+                ],
+                border: Border.all(
+                  color: Color(0xee7BC4E9),
+                  width: 1,
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  (type == "날짜" && postDate != null)
+                      ? postDate
+                      : (type == "시간" && postTime != null)
+                          ? postTime
+                          : hintText,
+                  style: (type == "날짜" && postDate != null)
+                      ? TextStyle(color: Colors.black87, fontSize: 14)
+                      : (type == "시간" && postTime != null)
+                          ? TextStyle(color: Colors.black87, fontSize: 14)
+                          : TextStyle(color: Colors.grey[500], fontSize: 14),
+                ),
               ),
             ),
-          ),
-        ],
-      )
-    ],
-  );
+          ],
+        )
+      ],
+    );
+  }
 }
