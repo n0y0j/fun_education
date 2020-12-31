@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:todoapp/auth/sign_page.dart';
 import 'package:todoapp/firebase/fire_auth.dart';
 import 'package:todoapp/home/home_page.dart';
+import 'package:todoapp/model/people.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -10,6 +12,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   FireAuth fa = new FireAuth();
+  String nickname;
 
   TextEditingController emailCon = new TextEditingController();
   TextEditingController passCon = new TextEditingController();
@@ -120,13 +123,28 @@ class _LoginPageState extends State<LoginPage> {
 
   login() async {
     await fa.loginUser(emailCon.text, passCon.text);
+    await getNickname();
 
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) => HomePage(),
+        builder: (BuildContext context) => HomePage(
+          user: new People(nickname, fa.user.uid),
+        ),
       ),
     );
+  }
+
+  getNickname() async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(fa.user.uid)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      setState(() {
+        nickname = documentSnapshot.get('nickname');
+      });
+    });
   }
 
   Widget makeTextField(String title, String hintText, Icon icon,

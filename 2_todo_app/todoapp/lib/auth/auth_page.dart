@@ -17,15 +17,16 @@ class _AuthPageState extends State<AuthPage> {
 
   @override
   void initState() {
-    getNickname();
+    if (fa.user != null) getNickname();
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (fa.uid != null && nickname != null) {
+    if (fa.user != null && nickname != null) {
       return HomePage(
-        user: new People(nickname, fa.uid),
+        user: new People(nickname, fa.user.uid),
       );
     }
     return Scaffold(
@@ -76,7 +77,7 @@ class _AuthPageState extends State<AuthPage> {
   getNickname() async {
     await FirebaseFirestore.instance
         .collection('users')
-        .doc(fa.uid)
+        .doc(fa.user.uid)
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       setState(() {

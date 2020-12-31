@@ -4,10 +4,10 @@ import 'package:todoapp/firebase/fire_store.dart';
 class FireAuth {
   FirebaseAuth auth = FirebaseAuth.instance;
   FireStore fs = new FireStore();
-  String uid;
+  User user;
 
   FireAuth() {
-    uid = auth.currentUser.uid;
+    user = auth.currentUser;
   }
 
   registerUser(
