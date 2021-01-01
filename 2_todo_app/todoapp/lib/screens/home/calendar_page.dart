@@ -54,7 +54,8 @@ class _CalendarPageState extends State<CalendarPage> {
             SizedBox(height: 20),
             (data == null)
                 ? Container()
-                : Column(children: scheduleWidget(context, data, widget.user))
+                : Column(
+                    children: calendarScheWidget(context, data, widget.user))
           ],
         ),
       ),

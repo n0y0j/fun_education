@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todoapp/constants/db_constants.dart';
 import 'package:todoapp/constants/todo_constants.dart';
-import 'package:todoapp/firebase/fire_store.dart';
-
 import 'package:todoapp/model/people.dart';
 import 'package:todoapp/screens/home/calendar_page.dart';
 import 'package:todoapp/screens/home/today_schedule.dart';
@@ -48,11 +46,7 @@ class _HomePageState extends State<HomePage> {
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height * 0.5,
                 decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Color(0xffa1c4fd), Color(0xffc2e9fb)],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
+                    gradient: gradient,
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(100),
                       bottomRight: Radius.circular(100),
