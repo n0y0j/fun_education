@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:todoapp/firebase/fire_store.dart';
-import 'package:todoapp/home/widget/schedule_widget.dart';
+import 'package:todoapp/constants/db_constants.dart';
+import 'package:todoapp/constants/todo_constants.dart';
 import 'package:todoapp/model/people.dart';
 import 'package:todoapp/model/post.dart';
+import 'package:todoapp/screens/home/widget/schedule_widget.dart';
 
 class CalendarPage extends StatefulWidget {
   final People user;
@@ -16,24 +16,8 @@ class CalendarPage extends StatefulWidget {
 
 class _CalendarPageState extends State<CalendarPage> {
   CalendarController controller = new CalendarController();
-  DateTime today = DateTime.now();
   DateTime selectedDay;
   List<Post> data;
-  FireStore fs = new FireStore();
-  final monthList = [
-    "JAN",
-    "FEB",
-    "MAR",
-    "APR",
-    "MAY",
-    "JUN",
-    "JUL",
-    "AUG",
-    "SEP",
-    "OCT",
-    "NOV",
-    "DEC"
-  ];
 
   getScheduleDate(String date) async {
     await fs.getSchedule(widget.user.uid, date);
@@ -45,8 +29,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   void initState() {
-    print("hi");
-    getScheduleDate("${today.year} ${monthList[today.month - 1]} ${today.day}");
+    getScheduleDate(todayStr);
 
     super.initState();
   }
@@ -66,7 +49,7 @@ class _CalendarPageState extends State<CalendarPage> {
               initialCalendarFormat: CalendarFormat.week,
             ),
             SizedBox(height: 30),
-            Text("${today.year} ${monthList[today.month - 1]} ${today.day}",
+            Text(todayStr,
                 style: TextStyle(fontSize: 22, color: Colors.grey[600])),
             SizedBox(height: 20),
             (data == null)

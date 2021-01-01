@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:todoapp/firebase/fire_store.dart';
-import 'package:todoapp/home/home_page.dart';
+
 import 'package:todoapp/model/people.dart';
 import 'package:todoapp/model/post.dart';
+import 'package:todoapp/screens/home/home_page.dart';
 
 List<Widget> scheduleWidget(
     BuildContext context, List<Post> data, People user) {

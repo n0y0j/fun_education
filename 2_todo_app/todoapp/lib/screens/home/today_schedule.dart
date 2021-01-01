@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:todoapp/constants/db_constants.dart';
+import 'package:todoapp/constants/todo_constants.dart';
+
 import 'package:todoapp/firebase/fire_store.dart';
-import 'package:todoapp/home/widget/schedule_widget.dart';
+
 import 'package:todoapp/model/people.dart';
 import 'package:todoapp/model/post.dart';
+import 'package:todoapp/screens/home/widget/schedule_widget.dart';
 
 class TodaySchedule extends StatefulWidget {
   final People user;
@@ -17,26 +20,9 @@ class _TodayScheduleState extends State<TodaySchedule> {
   String nickname;
   String uid;
   List<Post> data;
-  FireStore fs = new FireStore();
-  DateTime today = DateTime.now();
-  final monthList = [
-    "JAN",
-    "FEB",
-    "MAR",
-    "APR",
-    "MAY",
-    "JUN",
-    "JUL",
-    "AUG",
-    "SEP",
-    "OCT",
-    "NOV",
-    "DEC"
-  ];
 
   getScheduleDate() async {
-    await fs.getSchedule(widget.user.uid,
-        "${today.year} ${monthList[today.month - 1]} ${today.day}");
+    await fs.getSchedule(widget.user.uid, todayStr);
 
     setState(() {
       data = fs.getData();

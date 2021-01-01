@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:todoapp/auth/sign_page.dart';
-import 'package:todoapp/firebase/fire_auth.dart';
-import 'package:todoapp/home/home_page.dart';
+import 'package:todoapp/constants/db_constants.dart';
+import 'package:todoapp/constants/todo_constants.dart';
 import 'package:todoapp/model/people.dart';
+import 'package:todoapp/screens/auth/sign_page.dart';
+import 'package:todoapp/screens/auth/widget/make_textfield.dart';
+import 'package:todoapp/screens/home/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -11,7 +13,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  FireAuth fa = new FireAuth();
   String nickname;
 
   TextEditingController emailCon = new TextEditingController();
@@ -39,11 +40,11 @@ class _LoginPageState extends State<LoginPage> {
           height: MediaQuery.of(context).size.height,
           child: Column(
             children: [
-              Image.asset('assets/images/logo.png', height: 80),
+              Image.asset(logoImg, height: 80),
               SizedBox(height: MediaQuery.of(context).size.height * 0.12),
-              makeTextField('이메일', '이메일을 입력해주세요',
+              makeTextField(context, '이메일', '이메일을 입력해주세요',
                   Icon(Icons.email, color: Colors.blueAccent), emailCon),
-              makeTextField('비밀번호', '비밀번호를 입력해주세요',
+              makeTextField(context, '비밀번호', '비밀번호를 입력해주세요',
                   Icon(Icons.https, color: Colors.blueAccent), passCon),
               SizedBox(height: 15),
               Row(
@@ -73,11 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height * 0.325,
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Color(0xffa1c4fd), Color(0xffc2e9fb)],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
+                  gradient: gradient,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(200),
                     topRight: Radius.circular(200),
@@ -86,25 +83,25 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   children: [
                     SizedBox(height: MediaQuery.of(context).size.height * 0.12),
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      width: MediaQuery.of(context).size.width * 0.7,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          color: Color(0xee7BC4E9),
-                          width: 3,
+                    InkWell(
+                      onTap: () {
+                        login();
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        width: MediaQuery.of(context).size.width * 0.7,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(
+                            color: Color(0xee7BC4E9),
+                            width: 3,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(30),
+                          ),
                         ),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(30),
-                        ),
-                      ),
-                      child: InkWell(
-                        onTap: () {
-                          login();
-                        },
                         child: Text(
-                          "로그인",
+                          "입장",
                           style:
                               TextStyle(fontSize: 20, color: Colors.grey[700]),
                           textAlign: TextAlign.center,
@@ -136,58 +133,13 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   getNickname() async {
+    print(fa.user.uid);
     await FirebaseFirestore.instance
-        .collection('users')
+        .collection(COLLECTION)
         .doc(fa.user.uid)
         .get()
         .then((DocumentSnapshot documentSnapshot) {
-      setState(() {
-        nickname = documentSnapshot.get('nickname');
-      });
+      nickname = documentSnapshot.get(NICKNAME);
     });
-  }
-
-  Widget makeTextField(String title, String hintText, Icon icon,
-      TextEditingController controller) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(height: 20),
-        Text(
-          title,
-          style: TextStyle(color: Colors.black87),
-        ),
-        SizedBox(height: 5),
-        Container(
-          width: MediaQuery.of(context).size.width * 0.85,
-          height: 45,
-          padding: EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 4),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(
-              Radius.circular(50),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 5,
-              )
-            ],
-            border: Border.all(
-              color: Color(0xee7BC4E9),
-              width: 1,
-            ),
-          ),
-          child: TextField(
-            controller: controller,
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                icon: icon,
-                hintText: hintText,
-                hintStyle: TextStyle(color: Colors.grey[500], fontSize: 14)),
-          ),
-        ),
-      ],
-    );
   }
 }

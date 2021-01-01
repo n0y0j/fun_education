@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todoapp/auth/auth_page.dart';
+import 'package:todoapp/constants/todo_constants.dart';
+import 'package:todoapp/screens/auth/auth_page.dart';
 
 class IntroPage extends StatefulWidget {
   @override
@@ -10,7 +11,6 @@ class _IntroPageState extends State<IntroPage> {
   @override
   void initState() {
     super.initState();
-
     Future.delayed(Duration(milliseconds: 1000), () {
       Navigator.push(
         context,
@@ -29,7 +29,7 @@ class _IntroPageState extends State<IntroPage> {
         height: MediaQuery.of(context).size.height,
         child: Center(
           child: Image.asset(
-            'assets/images/logo.png',
+            logoImg,
             height: 250,
           ),
         ),

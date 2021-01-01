@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:todoapp/constants/db_constants.dart';
+import 'package:todoapp/constants/todo_constants.dart';
 import 'package:todoapp/firebase/fire_store.dart';
-import 'package:todoapp/home/calendar_page.dart';
-import 'package:todoapp/home/today_schedule.dart';
+
 import 'package:todoapp/model/people.dart';
+import 'package:todoapp/screens/home/calendar_page.dart';
+import 'package:todoapp/screens/home/today_schedule.dart';
 
 class HomePage extends StatefulWidget {
   final People user;
@@ -18,29 +21,13 @@ class _HomePageState extends State<HomePage> {
   String pageType = "today";
   bool click = false;
   DateTime selectedDate;
-  FireStore fs = new FireStore();
   TextEditingController contentCon = new TextEditingController();
   String postDate;
   String postTime;
   int count;
-  final monthList = [
-    "JAN",
-    "FEB",
-    "MAR",
-    "APR",
-    "MAY",
-    "JUN",
-    "JUL",
-    "AUG",
-    "SEP",
-    "OCT",
-    "NOV",
-    "DEC"
-  ];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     if (widget.pageType == null)
