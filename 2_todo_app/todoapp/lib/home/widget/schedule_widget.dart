@@ -1,9 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:todoapp/firebase/fire_store.dart';
+import 'package:todoapp/home/home_page.dart';
+import 'package:todoapp/model/people.dart';
 import 'package:todoapp/model/post.dart';
 
-List<Widget> scheduleWidget(BuildContext context, List<Post> data) {
+List<Widget> scheduleWidget(
+    BuildContext context, List<Post> data, People user) {
+  FireStore fs = new FireStore();
   List<Widget> result = List<Widget>();
+
+  deleteSchedule(String uid, String date, String id) async {
+    await fs.deleteSchedule(uid, date, id);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => HomePage(
+          user: user,
+          pageType: "schedule",
+        ),
+      ),
+    );
+  }
 
   data.forEach((element) {
     result.add(
@@ -68,17 +87,12 @@ List<Widget> scheduleWidget(BuildContext context, List<Post> data) {
             secondaryActions: [
               IconSlideAction(
                 foregroundColor: Colors.white,
-                caption: "Edit",
-                color: Color(0xffc2e9fb),
-                iconWidget: Icon(Icons.edit, color: Colors.white),
-                onTap: () {},
-              ),
-              IconSlideAction(
-                foregroundColor: Colors.white,
                 caption: "Delete",
-                color: Color(0xffa1c4fd),
+                color: Color(0xffc2e9fb),
                 iconWidget: Icon(Icons.delete, color: Colors.white),
-                onTap: () {},
+                onTap: () {
+                  deleteSchedule(user.uid, element.date, element.id);
+                },
               ),
             ],
           ),

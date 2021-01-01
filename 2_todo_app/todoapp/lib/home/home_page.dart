@@ -6,8 +6,9 @@ import 'package:todoapp/model/people.dart';
 
 class HomePage extends StatefulWidget {
   final People user;
+  final String pageType;
 
-  const HomePage({Key key, this.user}) : super(key: key);
+  const HomePage({Key key, this.user, this.pageType}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -36,6 +37,17 @@ class _HomePageState extends State<HomePage> {
     "NOV",
     "DEC"
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    if (widget.pageType == null)
+      this.pageType = "today";
+    else
+      this.pageType = widget.pageType;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -229,13 +241,8 @@ class _HomePageState extends State<HomePage> {
                                       MediaQuery.of(context).size.height * 0.1),
                               InkWell(
                                 onTap: () {
-                                  fs.postSchedule(widget.user.uid, postDate,
+                                  postSchedule(widget.user.uid, postDate,
                                       contentCon.text, postTime, count);
-
-                                  contentCon.clear();
-                                  postDate = '';
-                                  postTime = '';
-                                  changeClick();
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(vertical: 15),
@@ -268,6 +275,25 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+  postSchedule(
+      String uid, String date, String content, String time, int count) async {
+    await fs.postSchedule(
+        widget.user.uid, postDate, contentCon.text, postTime, count);
+
+    contentCon.clear();
+    postDate = null;
+    postTime = null;
+    changeClick();
+
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) => HomePage(
+                  user: widget.user,
+                  pageType: "schedule",
+                )));
   }
 
   changePage(String page) {

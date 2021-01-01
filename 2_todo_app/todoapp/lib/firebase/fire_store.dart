@@ -11,10 +11,10 @@ class FireStore {
   }
 
   postSchedule(
-      String uid, String date, String content, String time, int count) {
+      String uid, String date, String content, String time, int count) async {
     CollectionReference post = firestore.collection('users');
 
-    post
+    await post
         .doc(uid)
         .collection(date)
         .doc()
@@ -32,12 +32,18 @@ class FireStore {
         .get()
         .then((QuerySnapshot querySnapshot) => {
               querySnapshot.docs.forEach((doc) {
-                data.add(new Post(doc.get('content'), doc.get('time')));
+                data.add(new Post(
+                    doc.get('content'), doc.get('time'), doc.id, date));
               })
             });
   }
 
   getData() {
     return data;
+  }
+
+  deleteSchedule(String uid, String date, String id) async {
+    CollectionReference post = firestore.collection('users');
+    await post.doc(uid).collection(date).doc(id).delete();
   }
 }

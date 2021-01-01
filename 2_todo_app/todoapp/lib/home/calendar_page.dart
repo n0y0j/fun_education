@@ -45,6 +45,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   void initState() {
+    print("hi");
     getScheduleDate("${today.year} ${monthList[today.month - 1]} ${today.day}");
 
     super.initState();
@@ -70,7 +71,7 @@ class _CalendarPageState extends State<CalendarPage> {
             SizedBox(height: 20),
             (data == null)
                 ? Container()
-                : Column(children: scheduleWidget(context, data))
+                : Column(children: scheduleWidget(context, data, widget.user))
           ],
         ),
       ),

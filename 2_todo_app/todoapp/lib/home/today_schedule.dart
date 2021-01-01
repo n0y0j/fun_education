@@ -76,7 +76,7 @@ class _TodayScheduleState extends State<TodaySchedule> {
             SizedBox(height: 30),
             (data == null)
                 ? Container()
-                : Column(children: scheduleWidget(context, data))
+                : Column(children: scheduleWidget(context, data, widget.user))
           ],
         ),
       ),
