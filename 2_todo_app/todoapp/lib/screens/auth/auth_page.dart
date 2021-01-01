@@ -2,9 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:todoapp/constants/db_constants.dart';
 import 'package:todoapp/constants/todo_constants.dart';
-
-import 'package:todoapp/firebase/fire_auth.dart';
-
 import 'package:todoapp/model/people.dart';
 import 'package:todoapp/screens/auth/sign_page.dart';
 import 'package:todoapp/screens/home/home_page.dart';
@@ -23,6 +20,13 @@ class _AuthPageState extends State<AuthPage> {
   void initState() {
     if (fa.user != null) getNickname();
     super.initState();
+  }
+
+  getNickname() async {
+    String a = await fs.getNickname(fa.user.uid);
+    setState(() {
+      nickname = a;
+    });
   }
 
   @override
@@ -72,18 +76,6 @@ class _AuthPageState extends State<AuthPage> {
         ),
       );
     }
-  }
-
-  getNickname() async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(fa.user.uid)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      setState(() {
-        nickname = documentSnapshot.get('nickname');
-      });
-    });
   }
 }
 

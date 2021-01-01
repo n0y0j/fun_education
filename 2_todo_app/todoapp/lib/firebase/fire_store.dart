@@ -47,4 +47,17 @@ class FireStore {
     CollectionReference post = firestore.collection(COLLECTION);
     await post.doc(uid).collection(date).doc(id).delete();
   }
+
+  getNickname(String uid) async {
+    String nickname;
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      nickname = documentSnapshot.get('nickname');
+    });
+
+    return nickname;
+  }
 }

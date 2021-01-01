@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:todoapp/constants/db_constants.dart';
 import 'package:todoapp/constants/todo_constants.dart';
@@ -133,13 +132,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   getNickname() async {
-    print(fa.user.uid);
-    await FirebaseFirestore.instance
-        .collection(COLLECTION)
-        .doc(fa.user.uid)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      nickname = documentSnapshot.get(NICKNAME);
+    String a = await fs.getNickname(fa.user.uid);
+    setState(() {
+      nickname = a;
     });
   }
 }

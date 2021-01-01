@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todoapp/model/people.dart';
 
 String logoImg = 'assets/images/logo.png';
 
