@@ -7,9 +7,8 @@ import 'package:todoapp/screens/home/today_schedule.dart';
 
 class HomePage extends StatefulWidget {
   final People user;
-  final String pageType;
 
-  const HomePage({Key key, this.user, this.pageType}) : super(key: key);
+  const HomePage({this.user});
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -18,21 +17,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String pageType = "today";
   bool click = false;
-  DateTime selectedDate;
   TextEditingController contentCon = new TextEditingController();
   String postDate;
   String postTime;
   int count;
-
-  @override
-  void initState() {
-    super.initState();
-
-    if (widget.pageType == null)
-      this.pageType = "today";
-    else
-      this.pageType = widget.pageType;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -263,18 +251,12 @@ class _HomePageState extends State<HomePage> {
     await fs.postSchedule(
         widget.user.uid, postDate, contentCon.text, postTime, count);
 
-    contentCon.clear();
-    postDate = null;
-    postTime = null;
-    changeClick();
-
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (BuildContext context) => HomePage(
-                  user: widget.user,
-                  pageType: "schedule",
-                )));
+    setState(() {
+      contentCon.clear();
+      postDate = null;
+      postTime = null;
+      click = false;
+    });
   }
 
   changePage(String page) {

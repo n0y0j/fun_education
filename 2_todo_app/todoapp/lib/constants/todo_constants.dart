@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:todoapp/model/people.dart';
 
 String logoImg = 'assets/images/logo.png';
 
 Color lightBlue = Color(0xffa1c4fd);
-Color skyBlue = Color(0xffa1c4fd);
+Color skyBlue = Color(0xffc2e9fb);
 
 LinearGradient gradient = LinearGradient(
   colors: [lightBlue, skyBlue],

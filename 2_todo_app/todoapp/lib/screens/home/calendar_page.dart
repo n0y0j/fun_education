@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:todoapp/constants/db_constants.dart';
 import 'package:todoapp/constants/todo_constants.dart';
@@ -17,25 +19,24 @@ class CalendarPage extends StatefulWidget {
 class _CalendarPageState extends State<CalendarPage> {
   CalendarController controller = new CalendarController();
   DateTime selectedDay;
-  List<Post> data;
+  String date;
+  StreamController<List<Post>> streamController = new StreamController();
 
   getScheduleDate(String date) async {
-    await fs.getSchedule(widget.user.uid, date);
-
-    setState(() {
-      data = fs.getData();
-    });
+    await fs
+        .getSchedule(widget.user.uid, date)
+        .then((value) => streamController.add(value));
   }
 
   @override
   void initState() {
-    getScheduleDate(todayStr);
-
+    date = todayStr;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    getScheduleDate(date);
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(22.0),
@@ -52,10 +53,16 @@ class _CalendarPageState extends State<CalendarPage> {
             Text(todayStr,
                 style: TextStyle(fontSize: 22, color: Colors.grey[600])),
             SizedBox(height: 20),
-            (data == null)
-                ? Container()
-                : Column(
-                    children: calendarScheWidget(context, data, widget.user))
+            StreamBuilder(
+                stream: streamController.stream,
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.hasData) {
+                    return Column(
+                        children: calendarScheWidget(
+                            context, snapshot.data, widget.user));
+                  } else
+                    return Container();
+                })
           ],
         ),
       ),
@@ -65,8 +72,44 @@ class _CalendarPageState extends State<CalendarPage> {
   void _onDaySelected(DateTime day, List events, List holidays) {
     setState(() {
       selectedDay = day;
-      getScheduleDate(
-          "${selectedDay.year} ${monthList[selectedDay.month - 1]} ${selectedDay.day}");
+      date =
+          "${selectedDay.year} ${monthList[selectedDay.month - 1]} ${selectedDay.day}";
     });
+  }
+
+  deleteSchedule(String uid, String date, String id) async {
+    await fs.deleteSchedule(uid, date, id);
+    setState(() {});
+  }
+
+  List<Widget> calendarScheWidget(
+      BuildContext context, List<Post> data, People user) {
+    List<Widget> result = List<Widget>();
+
+    data.forEach((element) {
+      result.add(Column(
+        children: [
+          Slidable(
+            actionPane: SlidableBehindActionPane(),
+            actionExtentRatio: 0.3,
+            child: scheWidget(context, element.content, element.time),
+            secondaryActions: [
+              IconSlideAction(
+                foregroundColor: Colors.white,
+                caption: "Delete",
+                color: Color(0xffc2e9fb),
+                iconWidget: Icon(Icons.delete, color: Colors.white),
+                onTap: () {
+                  deleteSchedule(user.uid, element.date, element.id);
+                },
+              ),
+            ],
+          ),
+          SizedBox(height: 20),
+        ],
+      ));
+    });
+
+    return result;
   }
 }

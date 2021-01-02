@@ -4,7 +4,6 @@ import 'package:todoapp/model/post.dart';
 
 class FireStore {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  List<Post> data;
 
   createUser(String uid, String nickname) {
     CollectionReference users = firestore.collection(COLLECTION);
@@ -22,10 +21,11 @@ class FireStore {
         .set({CONTENT: content, TIME: time, COUNT: count});
   }
 
-  getSchedule(String uid, String date) async {
-    data = new List<Post>();
-    CollectionReference post = firestore.collection(COLLECTION);
+  Future<List<Post>> getSchedule(String uid, String date) async {
+    List<Post> data = new List<Post>();
 
+    CollectionReference post = firestore.collection(COLLECTION);
+    print("==========================start=======================");
     await post
         .doc(uid)
         .collection(date)
@@ -35,11 +35,12 @@ class FireStore {
               querySnapshot.docs.forEach((doc) {
                 data.add(
                     new Post(doc.get(CONTENT), doc.get(TIME), doc.id, date));
+                print("check title ${doc.get(CONTENT)}");
               })
             });
-  }
 
-  getData() {
+    print("check data $data");
+
     return data;
   }
 
