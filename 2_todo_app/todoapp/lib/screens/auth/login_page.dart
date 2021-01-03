@@ -4,6 +4,7 @@ import 'package:todoapp/constants/todo_constants.dart';
 import 'package:todoapp/model/people.dart';
 import 'package:todoapp/screens/auth/sign_page.dart';
 import 'package:todoapp/screens/auth/widget/make_textfield.dart';
+import 'package:todoapp/screens/bottom_bar.dart';
 import 'package:todoapp/screens/home/home_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -16,10 +17,12 @@ class _LoginPageState extends State<LoginPage> {
 
   TextEditingController emailCon = new TextEditingController();
   TextEditingController passCon = new TextEditingController();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.white12,
         elevation: 0,
@@ -69,45 +72,48 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.15),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.325,
-                decoration: BoxDecoration(
-                  gradient: gradient,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(200),
-                    topRight: Radius.circular(200),
+              Expanded(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  decoration: BoxDecoration(
+                    gradient: gradient,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(200),
+                      topRight: Radius.circular(200),
+                    ),
                   ),
-                ),
-                child: Column(
-                  children: [
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.12),
-                    InkWell(
-                      onTap: () {
-                        login();
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(10),
-                        width: MediaQuery.of(context).size.width * 0.7,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(
-                            color: Color(0xee7BC4E9),
-                            width: 3,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.12),
+                      InkWell(
+                        onTap: () {
+                          login();
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Color(0xee7BC4E9),
+                              width: 3,
+                            ),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(30),
+                            ),
                           ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(30),
+                          child: Text(
+                            "입장",
+                            style: TextStyle(
+                                fontSize: 20, color: Colors.grey[700]),
+                            textAlign: TextAlign.center,
                           ),
-                        ),
-                        child: Text(
-                          "입장",
-                          style:
-                              TextStyle(fontSize: 20, color: Colors.grey[700]),
-                          textAlign: TextAlign.center,
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -118,23 +124,27 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   login() async {
-    await fa.loginUser(emailCon.text, passCon.text);
-    await getNickname();
+    if (emailCon.text == "" || passCon.text == "")
+      scaffoldKey.currentState.showSnackBar(snackBar("입력칸을 확인해주세요."));
+    else {
+      await fa.loginUser(emailCon.text, passCon.text);
+      await getNickname();
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => HomePage(
-          user: new People(nickname, fa.user.uid),
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => HomePage(
+            user: new People(nickname, fa.user.uid),
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   getNickname() async {
-    String a = await fs.getNickname(fa.user.uid);
+    String temp = await fs.getNickname(fa.user.uid);
     setState(() {
-      nickname = a;
+      nickname = temp;
     });
   }
 }

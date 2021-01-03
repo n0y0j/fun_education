@@ -1,12 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:todoapp/constants/db_constants.dart';
 import 'package:todoapp/constants/todo_constants.dart';
 import 'package:todoapp/model/people.dart';
+import 'package:todoapp/screens/auth/login_page.dart';
 import 'package:todoapp/screens/auth/sign_page.dart';
+import 'package:todoapp/screens/bottom_bar.dart';
 import 'package:todoapp/screens/home/home_page.dart';
-
-import 'login_page.dart';
 
 class AuthPage extends StatefulWidget {
   @override

@@ -25,7 +25,6 @@ class FireStore {
     List<Post> data = new List<Post>();
 
     CollectionReference post = firestore.collection(COLLECTION);
-    print("==========================start=======================");
     await post
         .doc(uid)
         .collection(date)
@@ -35,11 +34,8 @@ class FireStore {
               querySnapshot.docs.forEach((doc) {
                 data.add(
                     new Post(doc.get(CONTENT), doc.get(TIME), doc.id, date));
-                print("check title ${doc.get(CONTENT)}");
               })
             });
-
-    print("check data $data");
 
     return data;
   }

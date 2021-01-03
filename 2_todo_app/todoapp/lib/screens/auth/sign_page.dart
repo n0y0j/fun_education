@@ -3,6 +3,7 @@ import 'package:todoapp/constants/db_constants.dart';
 import 'package:todoapp/constants/todo_constants.dart';
 import 'package:todoapp/screens/auth/login_page.dart';
 import 'package:todoapp/screens/auth/widget/make_textfield.dart';
+import 'package:todoapp/screens/bottom_bar.dart';
 
 class SignPage extends StatefulWidget {
   @override
@@ -14,10 +15,12 @@ class _SignPageState extends State<SignPage> {
   TextEditingController nickCon = new TextEditingController();
   TextEditingController passCon = new TextEditingController();
   TextEditingController repassCon = new TextEditingController();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.white12,
         elevation: 0,
@@ -47,45 +50,50 @@ class _SignPageState extends State<SignPage> {
               makeTextField(context, '비밀번호 확인', '비밀번호를 입력해주세요',
                   Icon(Icons.https, color: Colors.blueAccent), repassCon),
               SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.35,
-                decoration: BoxDecoration(
-                  gradient: gradient,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(200),
-                    topRight: Radius.circular(200),
+              Expanded(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  decoration: BoxDecoration(
+                    gradient: gradient,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(200),
+                      topRight: Radius.circular(200),
+                    ),
                   ),
-                ),
-                child: Column(
-                  children: [
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.12),
-                    InkWell(
-                      onTap: () {
-                        signup();
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(10),
-                        width: MediaQuery.of(context).size.width * 0.7,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(
-                            color: Color(0xee7BC4E9),
-                            width: 3,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.12),
+                      InkWell(
+                        onTap: () {
+                          scaffoldKey.currentState
+                              .showSnackBar(snackBar("회원가입 중..."));
+                          signup();
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Color(0xee7BC4E9),
+                              width: 3,
+                            ),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(30),
+                            ),
                           ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(30),
+                          child: Text(
+                            "회원가입",
+                            style: TextStyle(
+                                fontSize: 20, color: Colors.grey[700]),
+                            textAlign: TextAlign.center,
                           ),
-                        ),
-                        child: Text(
-                          "회원가입",
-                          style:
-                              TextStyle(fontSize: 20, color: Colors.grey[700]),
-                          textAlign: TextAlign.center,
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -96,14 +104,24 @@ class _SignPageState extends State<SignPage> {
   }
 
   signup() async {
-    await fa.registerUser(
-        emailCon.text, nickCon.text, passCon.text, repassCon.text);
+    if (emailCon.text == '' ||
+        nickCon.text == '' ||
+        passCon.text == '' ||
+        repassCon.text == '')
+      scaffoldKey.currentState.showSnackBar(snackBar("입력칸을 확인해주세요."));
+    else if (passCon.text != repassCon.text)
+      scaffoldKey.currentState.showSnackBar(snackBar("입력된 패스워드가 다릅니다."));
+    else {
+      await fa.registerUser(
+          emailCon.text, nickCon.text, passCon.text, repassCon.text);
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => LoginPage(),
-      ),
-    );
+      Future.delayed(Duration(seconds: 2), () {
+        snackBar("회원가입이 완료되었습니다.");
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+        );
+      });
+    }
   }
 }

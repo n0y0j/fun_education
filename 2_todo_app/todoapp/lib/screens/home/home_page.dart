@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todoapp/constants/db_constants.dart';
 import 'package:todoapp/constants/todo_constants.dart';
 import 'package:todoapp/model/people.dart';
+import 'package:todoapp/screens/bottom_bar.dart';
 import 'package:todoapp/screens/home/calendar_page.dart';
 import 'package:todoapp/screens/home/today_schedule.dart';
 
@@ -21,10 +22,12 @@ class _HomePageState extends State<HomePage> {
   String postDate;
   String postTime;
   int count;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       body: Stack(
         alignment: Alignment.center,
         children: [
@@ -156,14 +159,31 @@ class _HomePageState extends State<HomePage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Center(
-                                child: Text(
-                                  "일정 추가하기",
-                                  style: TextStyle(
-                                      fontSize: 22, color: Colors.black87),
-                                ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(),
+                                  SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.05),
+                                  Text(
+                                    "일정 추가하기",
+                                    style: TextStyle(
+                                        fontSize: 22, color: Colors.black87),
+                                  ),
+                                  IconButton(
+                                      icon: Icon(
+                                        Icons.close,
+                                        size: 30,
+                                        color: Colors.grey,
+                                      ),
+                                      onPressed: () {
+                                        changeClick();
+                                      })
+                                ],
                               ),
-                              SizedBox(height: 40),
+                              SizedBox(height: 20),
                               Text(
                                 "일정",
                                 style: TextStyle(
@@ -248,15 +268,20 @@ class _HomePageState extends State<HomePage> {
 
   postSchedule(
       String uid, String date, String content, String time, int count) async {
-    await fs.postSchedule(
-        widget.user.uid, postDate, contentCon.text, postTime, count);
+    print(postTime);
+    if (postDate == null || contentCon.text == '' || postTime == null)
+      scaffoldKey.currentState.showSnackBar(snackBar("입력칸을 확인해주세요."));
+    else {
+      await fs.postSchedule(
+          widget.user.uid, postDate, contentCon.text, postTime, count);
 
-    setState(() {
-      contentCon.clear();
-      postDate = null;
-      postTime = null;
-      click = false;
-    });
+      setState(() {
+        contentCon.clear();
+        postDate = null;
+        postTime = null;
+        click = false;
+      });
+    }
   }
 
   changePage(String page) {
