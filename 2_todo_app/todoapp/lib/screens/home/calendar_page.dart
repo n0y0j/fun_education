@@ -6,6 +6,7 @@ import 'package:todoapp/constants/db_constants.dart';
 import 'package:todoapp/constants/todo_constants.dart';
 import 'package:todoapp/model/people.dart';
 import 'package:todoapp/model/post.dart';
+import 'package:todoapp/screens/home/newtask_page.dart';
 import 'package:todoapp/screens/home/widget/schedule_widget.dart';
 
 class CalendarPage extends StatefulWidget {
@@ -50,8 +51,7 @@ class _CalendarPageState extends State<CalendarPage> {
               initialCalendarFormat: CalendarFormat.week,
             ),
             SizedBox(height: 30),
-            Text(todayStr,
-                style: TextStyle(fontSize: 22, color: Colors.grey[600])),
+            Text(date, style: TextStyle(fontSize: 22, color: Colors.grey[600])),
             SizedBox(height: 20),
             StreamBuilder(
                 stream: streamController.stream,
@@ -62,7 +62,43 @@ class _CalendarPageState extends State<CalendarPage> {
                             context, snapshot.data, widget.user));
                   } else
                     return Container();
-                })
+                }),
+            Center(
+              child: InkWell(
+                onTap: () async {
+                  var result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          NewTaskPage(user: widget.user),
+                    ),
+                  );
+
+                  if (result == "refresh") setState(() {});
+                },
+                child: Container(
+                  height: 100,
+                  width: 70,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [Color(0xfff96060), Colors.red],
+                    ),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text(
+                      "+",
+                      style: TextStyle(
+                        fontSize: 40,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),

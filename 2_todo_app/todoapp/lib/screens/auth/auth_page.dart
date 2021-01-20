@@ -4,7 +4,6 @@ import 'package:todoapp/constants/todo_constants.dart';
 import 'package:todoapp/model/people.dart';
 import 'package:todoapp/screens/auth/login_page.dart';
 import 'package:todoapp/screens/auth/sign_page.dart';
-import 'package:todoapp/screens/bottom_bar.dart';
 import 'package:todoapp/screens/home/home_page.dart';
 
 class AuthPage extends StatefulWidget {
@@ -22,9 +21,9 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   getNickname() async {
-    String a = await fs.getNickname(fa.user.uid);
+    String temp = await fs.getNickname(fa.user.uid);
     setState(() {
-      nickname = a;
+      nickname = temp;
     });
   }
 

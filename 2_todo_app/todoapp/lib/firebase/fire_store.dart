@@ -52,7 +52,7 @@ class FireStore {
         .doc(uid)
         .get()
         .then((DocumentSnapshot documentSnapshot) {
-      nickname = documentSnapshot.get('nickname');
+      nickname = documentSnapshot.get(NICKNAME);
     });
 
     return nickname;

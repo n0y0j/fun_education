@@ -14,10 +14,10 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   String nickname;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   TextEditingController emailCon = new TextEditingController();
   TextEditingController passCon = new TextEditingController();
-  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {

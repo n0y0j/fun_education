@@ -59,8 +59,7 @@ class _TodayScheduleState extends State<TodaySchedule> {
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (snapshot.hasData) {
                     return Column(
-                        children: todayScheWidget(
-                            context, snapshot.data, widget.user));
+                        children: todayScheWidget(snapshot.data, widget.user));
                   } else
                     return Container();
                 })
@@ -75,8 +74,7 @@ class _TodayScheduleState extends State<TodaySchedule> {
     setState(() {});
   }
 
-  List<Widget> todayScheWidget(
-      BuildContext context, List<Post> data, People user) {
+  List<Widget> todayScheWidget(List<Post> data, People user) {
     List<Widget> result = List<Widget>();
 
     data.forEach((element) {
