@@ -4,6 +4,7 @@ import 'package:todoapp/constants/todo_constants.dart';
 import 'package:todoapp/model/people.dart';
 import 'package:todoapp/screens/auth/login_page.dart';
 import 'package:todoapp/screens/auth/sign_page.dart';
+import 'package:todoapp/screens/auth/widget/make_button.dart';
 import 'package:todoapp/screens/home/home_page.dart';
 
 class AuthPage extends StatefulWidget {
@@ -21,10 +22,7 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   getNickname() async {
-    String temp = await fs.getNickname(fa.user.uid);
-    setState(() {
-      nickname = temp;
-    });
+    nickname = await fs.getNickname(fa.user.uid);
   }
 
   @override
@@ -54,13 +52,7 @@ class _AuthPageState extends State<AuthPage> {
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * 0.45,
-              decoration: BoxDecoration(
-                gradient: gradient,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(200),
-                  topRight: Radius.circular(200),
-                ),
-              ),
+              decoration: bottomDesign,
               child: Column(
                 children: [
                   SizedBox(height: MediaQuery.of(context).size.height * 0.22),
@@ -94,24 +86,6 @@ Widget makeButton(BuildContext context, String title) {
               ),
             );
     },
-    child: Container(
-      padding: EdgeInsets.all(10),
-      width: MediaQuery.of(context).size.width * 0.7,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(
-          color: Color(0xee7BC4E9),
-          width: 3,
-        ),
-        borderRadius: BorderRadius.all(
-          Radius.circular(30),
-        ),
-      ),
-      child: Text(
-        title,
-        style: TextStyle(fontSize: 20, color: Colors.grey[700]),
-        textAlign: TextAlign.center,
-      ),
-    ),
+    child: makeButtonDesign(context, title),
   );
 }

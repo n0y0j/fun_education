@@ -80,11 +80,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   height: 100,
                   width: 70,
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topRight,
-                      end: Alignment.bottomLeft,
-                      colors: [Color(0xfff96060), Colors.red],
-                    ),
+                    color: Color(0xfff96060),
                     shape: BoxShape.circle,
                   ),
                   child: Center(

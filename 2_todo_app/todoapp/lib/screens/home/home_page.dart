@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todoapp/constants/db_constants.dart';
 import 'package:todoapp/constants/todo_constants.dart';
 import 'package:todoapp/model/people.dart';
-import 'package:todoapp/screens/bottom_bar.dart';
 import 'package:todoapp/screens/home/calendar_page.dart';
 import 'package:todoapp/screens/home/today_schedule.dart';
 

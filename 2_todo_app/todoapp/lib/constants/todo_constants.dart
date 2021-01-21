@@ -12,6 +12,31 @@ LinearGradient gradient = LinearGradient(
   end: Alignment.bottomCenter,
 );
 
+BoxDecoration bottomDesign = BoxDecoration(
+  gradient: gradient,
+  borderRadius: BorderRadius.only(
+    topLeft: Radius.circular(200),
+    topRight: Radius.circular(200),
+  ),
+);
+
+BoxDecoration inputDesign = BoxDecoration(
+  color: Colors.white,
+  borderRadius: BorderRadius.all(
+    Radius.circular(10),
+  ),
+  boxShadow: [
+    BoxShadow(
+      color: Colors.black12,
+      blurRadius: 5,
+    )
+  ],
+  border: Border.all(
+    color: Color(0xee7BC4E9),
+    width: 1,
+  ),
+);
+
 final monthList = [
   "JAN",
   "FEB",

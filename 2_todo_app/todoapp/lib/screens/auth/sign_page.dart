@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todoapp/constants/db_constants.dart';
 import 'package:todoapp/constants/todo_constants.dart';
 import 'package:todoapp/screens/auth/login_page.dart';
+import 'package:todoapp/screens/auth/widget/make_button.dart';
 import 'package:todoapp/screens/auth/widget/make_textfield.dart';
 import 'package:todoapp/screens/bottom_bar.dart';
 
@@ -54,44 +55,18 @@ class _SignPageState extends State<SignPage> {
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
-                  decoration: BoxDecoration(
-                    gradient: gradient,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(200),
-                      topRight: Radius.circular(200),
-                    ),
-                  ),
+                  decoration: bottomDesign,
                   child: Column(
                     children: [
                       SizedBox(
                           height: MediaQuery.of(context).size.height * 0.12),
                       InkWell(
-                        onTap: () {
-                          scaffoldKey.currentState
-                              .showSnackBar(snackBar("회원가입 중..."));
-                          signup();
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          width: MediaQuery.of(context).size.width * 0.7,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Color(0xee7BC4E9),
-                              width: 3,
-                            ),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(30),
-                            ),
-                          ),
-                          child: Text(
-                            "회원가입",
-                            style: TextStyle(
-                                fontSize: 20, color: Colors.grey[700]),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
+                          onTap: () {
+                            scaffoldKey.currentState
+                                .showSnackBar(snackBar("회원가입 중..."));
+                            signup();
+                          },
+                          child: makeButtonDesign(context, "회원가입")),
                     ],
                   ),
                 ),

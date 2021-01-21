@@ -74,22 +74,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
                       height: 45,
                       padding: EdgeInsets.only(
                           top: 4, left: 16, right: 16, bottom: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 5,
-                          )
-                        ],
-                        border: Border.all(
-                          color: Color(0xee7BC4E9),
-                          width: 1,
-                        ),
-                      ),
+                      decoration: inputDesign,
                       child: TextField(
                         controller: contentCon,
                         decoration: InputDecoration(
@@ -105,9 +90,18 @@ class _NewTaskPageState extends State<NewTaskPage> {
                     makeWidget("시간", "시간을 선택하세요"),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.1),
                     InkWell(
-                      onTap: () {
-                        postSchedule(widget.user.uid, postDate, contentCon.text,
-                            postTime, count);
+                      onTap: () async {
+                        if (postDate == null ||
+                            contentCon.text == '' ||
+                            postTime == null)
+                          scaffoldKey.currentState
+                              .showSnackBar(snackBar("입력칸을 확인해주세요."));
+                        else {
+                          await fs.postSchedule(widget.user.uid, postDate,
+                              contentCon.text, postTime, count);
+
+                          Navigator.pop(context, "refresh");
+                        }
                       },
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 15),
@@ -139,64 +133,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
     );
   }
 
-  postSchedule(
-      String uid, String date, String content, String time, int count) async {
-    print(postTime);
-    if (postDate == null || contentCon.text == '' || postTime == null)
-      scaffoldKey.currentState.showSnackBar(snackBar("입력칸을 확인해주세요."));
-    else {
-      await fs.postSchedule(
-          widget.user.uid, postDate, contentCon.text, postTime, count);
-
-      Navigator.pop(context, "refresh");
-    }
-  }
-
   Column makeWidget(String type, String hintText) {
-    setTime() async {
-      TimeOfDay selectedTime = await showTimePicker(
-        initialTime: TimeOfDay.now(),
-        context: context,
-      );
-
-      String timeType = (selectedTime.hour < 12) ? 'AM' : 'PM';
-      String hour = (selectedTime.hour < 10)
-          ? '0${selectedTime.hour}'
-          : (selectedTime.hour < 13)
-              ? selectedTime.hour.toString()
-              : (selectedTime.hour < 20)
-                  ? '${int.parse(selectedTime.hour.toString()) - 12}'
-                  : '0${int.parse(selectedTime.hour.toString()) - 12}';
-      String minute = (selectedTime.minute.toString().length == 1)
-          ? '0${selectedTime.minute}'
-          : selectedTime.minute.toString();
-
-      setState(() {
-        postTime = '${hour}:${minute} ${timeType}';
-        count = (selectedTime.hour * 60) + (selectedTime.minute);
-      });
-    }
-
-    setDate() async {
-      DateTime selectedDate = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2020),
-        lastDate: DateTime(2030),
-        builder: (BuildContext context, Widget child) {
-          return Theme(
-            data: ThemeData.light(),
-            child: child,
-          );
-        },
-      );
-
-      setState(() {
-        postDate =
-            "${selectedDate.year} ${monthList[selectedDate.month - 1]} ${selectedDate.day}";
-      });
-    }
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -237,22 +174,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
               width: MediaQuery.of(context).size.width * 0.525,
               height: 45,
               padding: EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 4),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 5,
-                  )
-                ],
-                border: Border.all(
-                  color: Color(0xee7BC4E9),
-                  width: 1,
-                ),
-              ),
+              decoration: inputDesign,
               child: Center(
                 child: Text(
                   (type == "날짜" && postDate != null)
@@ -272,5 +194,49 @@ class _NewTaskPageState extends State<NewTaskPage> {
         )
       ],
     );
+  }
+
+  setTime() async {
+    TimeOfDay selectedTime = await showTimePicker(
+      initialTime: TimeOfDay.now(),
+      context: context,
+    );
+
+    String timeType = (selectedTime.hour < 12) ? 'AM' : 'PM';
+    String hour = (selectedTime.hour < 10)
+        ? '0${selectedTime.hour}'
+        : (selectedTime.hour < 13)
+            ? selectedTime.hour.toString()
+            : (selectedTime.hour < 20)
+                ? '${int.parse(selectedTime.hour.toString()) - 12}'
+                : '0${int.parse(selectedTime.hour.toString()) - 12}';
+    String minute = (selectedTime.minute.toString().length == 1)
+        ? '0${selectedTime.minute}'
+        : selectedTime.minute.toString();
+
+    setState(() {
+      postTime = '${hour}:${minute} ${timeType}';
+      count = (selectedTime.hour * 60) + (selectedTime.minute);
+    });
+  }
+
+  setDate() async {
+    DateTime selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2030),
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: ThemeData.light(),
+          child: child,
+        );
+      },
+    );
+
+    setState(() {
+      postDate =
+          "${selectedDate.year} ${monthList[selectedDate.month - 1]} ${selectedDate.day}";
+    });
   }
 }
