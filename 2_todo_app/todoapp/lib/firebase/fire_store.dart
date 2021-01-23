@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:todoapp/constants/db_constants.dart';
 import 'package:todoapp/model/post.dart';
+import 'package:todoapp/utils/constants/db_constants.dart';
 
 class FireStore {
   FirebaseFirestore firestore = FirebaseFirestore.instance;

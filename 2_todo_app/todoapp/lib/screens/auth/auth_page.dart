@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:todoapp/constants/db_constants.dart';
-import 'package:todoapp/constants/todo_constants.dart';
 import 'package:todoapp/model/people.dart';
 import 'package:todoapp/screens/auth/login_page.dart';
 import 'package:todoapp/screens/auth/sign_page.dart';
-import 'package:todoapp/screens/auth/widget/make_button.dart';
 import 'package:todoapp/screens/home/home_page.dart';
+import 'package:todoapp/utils/constants/db_constants.dart';
+import 'package:todoapp/utils/constants/todo_constants.dart';
+import 'package:todoapp/utils/make_button.dart';
 
 class AuthPage extends StatefulWidget {
   @override

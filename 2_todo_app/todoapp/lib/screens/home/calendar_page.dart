@@ -2,12 +2,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:todoapp/constants/db_constants.dart';
-import 'package:todoapp/constants/todo_constants.dart';
 import 'package:todoapp/model/people.dart';
 import 'package:todoapp/model/post.dart';
 import 'package:todoapp/screens/home/newtask_page.dart';
-import 'package:todoapp/screens/home/widget/schedule_widget.dart';
+import 'package:todoapp/utils/constants/db_constants.dart';
+import 'package:todoapp/utils/constants/todo_constants.dart';
+import 'package:todoapp/utils/schedule_widget.dart';
 
 class CalendarPage extends StatefulWidget {
   final People user;
