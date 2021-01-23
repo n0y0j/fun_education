@@ -47,6 +47,7 @@ class FireStore {
 
   getNickname(String uid) async {
     String nickname;
+    print(uid);
     await FirebaseFirestore.instance
         .collection('users')
         .doc(uid)

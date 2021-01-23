@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:todoapp/constants/todo_constants.dart';
-import 'package:todoapp/model/people.dart';
 import 'package:todoapp/screens/home/calendar_page.dart';
 import 'package:todoapp/screens/home/today_schedule.dart';
+import 'package:todoapp/utils/constants/db_constants.dart';
+import 'package:todoapp/utils/constants/todo_constants.dart';
 
 class HomePage extends StatefulWidget {
-  final People user;
-  const HomePage({this.user});
-
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  String nickname;
   String pageType = "today";
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  getNickname() async {
+    nickname = await fs.getNickname(fa.user.uid);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,9 +97,7 @@ class _HomePageState extends State<HomePage> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      (pageType == "today")
-                          ? TodaySchedule(user: widget.user)
-                          : CalendarPage(user: widget.user),
+                      (pageType == "today") ? TodaySchedule() : CalendarPage(),
                     ],
                   ),
                 )),

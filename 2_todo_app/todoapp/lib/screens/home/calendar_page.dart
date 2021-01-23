@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:todoapp/model/people.dart';
 import 'package:todoapp/model/post.dart';
 import 'package:todoapp/screens/home/newtask_page.dart';
 import 'package:todoapp/utils/constants/db_constants.dart';
@@ -10,9 +9,6 @@ import 'package:todoapp/utils/constants/todo_constants.dart';
 import 'package:todoapp/utils/schedule_widget.dart';
 
 class CalendarPage extends StatefulWidget {
-  final People user;
-
-  const CalendarPage({Key key, this.user}) : super(key: key);
   @override
   _CalendarPageState createState() => _CalendarPageState();
 }
@@ -25,7 +21,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
   getScheduleDate(String date) async {
     await fs
-        .getSchedule(widget.user.uid, date)
+        .getSchedule(fa.user.uid, date)
         .then((value) => streamController.add(value));
   }
 
@@ -58,8 +54,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (snapshot.hasData) {
                     return Column(
-                        children: calendarScheWidget(
-                            context, snapshot.data, widget.user));
+                        children: calendarScheWidget(context, snapshot.data));
                   } else
                     return Container();
                 }),
@@ -69,8 +64,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   var result = await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          NewTaskPage(user: widget.user),
+                      builder: (BuildContext context) => NewTaskPage(),
                     ),
                   );
 
@@ -114,8 +108,7 @@ class _CalendarPageState extends State<CalendarPage> {
     setState(() {});
   }
 
-  List<Widget> calendarScheWidget(
-      BuildContext context, List<Post> data, People user) {
+  List<Widget> calendarScheWidget(BuildContext context, List<Post> data) {
     List<Widget> result = List<Widget>();
 
     data.forEach((element) {
@@ -132,7 +125,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 color: Color(0xffc2e9fb),
                 iconWidget: Icon(Icons.delete, color: Colors.white),
                 onTap: () {
-                  deleteSchedule(user.uid, element.date, element.id);
+                  deleteSchedule(fa.user.uid, element.date, element.id);
                 },
               ),
             ],

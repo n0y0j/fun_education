@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:todoapp/model/people.dart';
 import 'package:todoapp/screens/auth/login_page.dart';
 import 'package:todoapp/screens/auth/sign_page.dart';
 import 'package:todoapp/screens/home/home_page.dart';
@@ -16,21 +15,9 @@ class _AuthPageState extends State<AuthPage> {
   String nickname;
 
   @override
-  void initState() {
-    if (fa.user != null) getNickname();
-    super.initState();
-  }
-
-  getNickname() async {
-    nickname = await fs.getNickname(fa.user.uid);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    if (fa.user != null && nickname != null) {
-      return HomePage(
-        user: new People(nickname, fa.user.uid),
-      );
+    if (fa.user != null) {
+      return HomePage();
     } else {
       return Scaffold(
         body: Column(

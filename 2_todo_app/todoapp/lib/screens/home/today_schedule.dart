@@ -1,16 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:todoapp/constants/db_constants.dart';
-import 'package:todoapp/constants/todo_constants.dart';
-import 'package:todoapp/model/people.dart';
 import 'package:todoapp/model/post.dart';
-import 'package:todoapp/screens/home/widget/schedule_widget.dart';
+import 'package:todoapp/utils/constants/db_constants.dart';
+import 'package:todoapp/utils/constants/todo_constants.dart';
+import 'package:todoapp/utils/schedule_widget.dart';
 
 class TodaySchedule extends StatefulWidget {
-  final People user;
-
-  const TodaySchedule({this.user});
   @override
   _TodayScheduleState createState() => _TodayScheduleState();
 }
@@ -18,16 +14,24 @@ class TodaySchedule extends StatefulWidget {
 class _TodayScheduleState extends State<TodaySchedule> {
   List<Post> data;
   StreamController<List<Post>> streamController = new StreamController();
+  StreamController<String> nickStreamController = new StreamController();
 
   getScheduleDate(String date) async {
     await fs
-        .getSchedule(widget.user.uid, date)
+        .getSchedule(fa.user.uid, date)
         .then((value) => streamController.add(value));
+  }
+
+  getNickName() async {
+    await fs
+        .getNickname(fa.user.uid)
+        .then((value) => nickStreamController.add(value));
   }
 
   @override
   void initState() {
     getScheduleDate(todayStr);
+    getNickName();
     super.initState();
   }
 
@@ -40,12 +44,21 @@ class _TodayScheduleState extends State<TodaySchedule> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              "오늘 ${widget.user.nickname}님의 일정",
-              style: TextStyle(
-                fontSize: 22,
-                color: Colors.grey[800],
-              ),
+            StreamBuilder(
+              stream: nickStreamController.stream,
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.hasData) {
+                  return Text(
+                    "오늘 ${snapshot.data}님의 일정",
+                    style: TextStyle(
+                      fontSize: 22,
+                      color: Colors.grey[800],
+                    ),
+                  );
+                } else {
+                  return CircularProgressIndicator();
+                }
+              },
             ),
             SizedBox(height: 10),
             Container(
@@ -58,8 +71,7 @@ class _TodayScheduleState extends State<TodaySchedule> {
                 stream: streamController.stream,
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (snapshot.hasData) {
-                    return Column(
-                        children: todayScheWidget(snapshot.data, widget.user));
+                    return Column(children: todayScheWidget(snapshot.data));
                   } else
                     return Container();
                 })
@@ -74,7 +86,7 @@ class _TodayScheduleState extends State<TodaySchedule> {
     setState(() {});
   }
 
-  List<Widget> todayScheWidget(List<Post> data, People user) {
+  List<Widget> todayScheWidget(List<Post> data) {
     List<Widget> result = List<Widget>();
 
     data.forEach((element) {
@@ -91,7 +103,7 @@ class _TodayScheduleState extends State<TodaySchedule> {
                 color: Color(0xffc2e9fb),
                 iconWidget: Icon(Icons.delete, color: Colors.white),
                 onTap: () {
-                  deleteSchedule(user.uid, element.date, element.id);
+                  deleteSchedule(fa.user.uid, element.date, element.id);
                 },
               ),
             ],

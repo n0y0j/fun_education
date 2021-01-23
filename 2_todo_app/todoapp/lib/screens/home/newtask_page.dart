@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:todoapp/constants/db_constants.dart';
-import 'package:todoapp/constants/todo_constants.dart';
-import 'package:todoapp/model/people.dart';
 import 'package:todoapp/screens/bottom_bar.dart';
+import 'package:todoapp/utils/constants/db_constants.dart';
+import 'package:todoapp/utils/constants/todo_constants.dart';
 
 class NewTaskPage extends StatefulWidget {
-  final People user;
-  const NewTaskPage({this.user});
   @override
   _NewTaskPageState createState() => _NewTaskPageState();
 }
@@ -97,7 +94,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
                           scaffoldKey.currentState
                               .showSnackBar(snackBar("입력칸을 확인해주세요."));
                         else {
-                          await fs.postSchedule(widget.user.uid, postDate,
+                          await fs.postSchedule(fa.user.uid, postDate,
                               contentCon.text, postTime, count);
 
                           Navigator.pop(context, "refresh");
@@ -207,9 +204,9 @@ class _NewTaskPageState extends State<NewTaskPage> {
         ? '0${selectedTime.hour}'
         : (selectedTime.hour < 13)
             ? selectedTime.hour.toString()
-            : (selectedTime.hour < 20)
-                ? '${int.parse(selectedTime.hour.toString()) - 12}'
-                : '0${int.parse(selectedTime.hour.toString()) - 12}';
+            : (selectedTime.hour < 22)
+                ? '0${int.parse(selectedTime.hour.toString()) - 12}'
+                : '${int.parse(selectedTime.hour.toString()) - 12}';
     String minute = (selectedTime.minute.toString().length == 1)
         ? '0${selectedTime.minute}'
         : selectedTime.minute.toString();
